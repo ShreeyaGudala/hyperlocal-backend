@@ -37,3 +37,10 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return new_user
+@app.get("/test-db")
+def test_db(db: Session = Depends(get_db)):
+    try:
+        db.execute("SELECT 1")
+        return {"database": "connected"}
+    except Exception as e:
+        return {"error": str(e)}
