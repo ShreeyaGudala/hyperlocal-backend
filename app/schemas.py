@@ -1,14 +1,42 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
 
-class UserCreate(BaseModel):
+
+# =========================
+# Base Schema (Shared Fields)
+# =========================
+
+class UserBase(BaseModel):
     email: EmailStr
-    phone: str
-    password: str
 
-class UserResponse(BaseModel):
+
+# =========================
+# Create User (Signup)
+# =========================
+
+class UserCreate(UserBase):
+    password: str = Field(
+        ...,
+        min_length=6,
+        max_length=72
+    )
+
+
+# =========================
+# User Response (Return to Client)
+# =========================
+
+class UserResponse(UserBase):
     id: int
-    email: EmailStr
-    phone: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # for SQLAlchemy ORM (Pydantic v2)
+
+
+# =========================
+# Login Schema (Optional but Recommended)
+# =========================
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
