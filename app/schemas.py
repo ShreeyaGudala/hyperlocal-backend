@@ -1,19 +1,16 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
 
 
-# =========================
-# Base Schema (Shared Fields)
-# =========================
-
+# ==========================
+# Base User Schema
+# ==========================
 class UserBase(BaseModel):
     email: EmailStr
 
 
-# =========================
-# Create User (Signup)
-# =========================
-
+# ==========================
+# Signup Schema (Request Body)
+# ==========================
 class UserCreate(UserBase):
     password: str = Field(
         ...,
@@ -22,21 +19,11 @@ class UserCreate(UserBase):
     )
 
 
-# =========================
-# User Response (Return to Client)
-# =========================
-
+# ==========================
+# User Response Schema (Returned to Client)
+# ==========================
 class UserResponse(UserBase):
     id: int
 
     class Config:
-        from_attributes = True  # for SQLAlchemy ORM (Pydantic v2)
-
-
-# =========================
-# Login Schema (Optional but Recommended)
-# =========================
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
+        from_attributes = True  # Required for SQLAlchemy ORM
