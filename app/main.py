@@ -43,3 +43,6 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     except Exception as e:
         return {"error": str(e)}
+        @app.post("/test")
+def test():
+    return {"status": "working"}
